@@ -8,23 +8,23 @@ fbuttons = InlineKeyboardMarkup(
         [
         [
             InlineKeyboardButton(
-                text="👥Support Group", url="https://t.me/szrosesupport"
+                text="👥Support Group", url="https://t.me/anu_pui"
             ),
             InlineKeyboardButton(
-                text="👤News Channel", url="https://t.me/Theszrosebot"
+                text="👤News Channel", url="https://t.me/anu_pui"
             )
         ], 
         [
             InlineKeyboardButton(
-                text="⚒ Source Code", url="https://github.com/szsupunma/sz-rosebot"
+                text="⚒ Owner", url="https://t.me/kkara9009"
             ),
             InlineKeyboardButton(
-                text="📓 Documentation", url="https://szsupunma.gitbook.io/rose-bot"
+                text="♥️ Co-owner", url="https://t.me/an_unic_or_n47"
             )
         ], 
         [
             InlineKeyboardButton(
-                text="🖥 How To Deploy Me", url="https://szsupunma.gitbook.io/rose-bot"
+                text="🖥 group", url="https://t.me/anu_pui"
             )
         ], 
         [
