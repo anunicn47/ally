@@ -7,7 +7,7 @@ from Rose.utils.lang import *
 from Rose.utils.filter_groups import *
 from typing import Union
 from Rose.plugins.protection import *
-from Rose.mongo.approvedb import Approve as approved_users
+from Rose.mongo.approvedb import Approve 
 from Rose.mongo.locksdb import *
 from Rose import *
 from Rose import BOT_ID, app as pbot, MONGO_URL as  MONGO_DB_URI
@@ -101,7 +101,7 @@ data = {
     "reply": "reply",
     "message": "message",
     "comment": "cmt",
-    "edit": "edt",
+    "edit": "edit",
     "mention": "mention",
     "inline": "inline",
     "polls": "poll",
@@ -109,7 +109,6 @@ data = {
     "buttons": "button",
     "media": "media",
     "email": "emal", 
-    "userbot":"ubot", 
     "url":"url",
     "spoiler":"spoiler",
     "anonchannel":"anonchannel",
@@ -129,8 +128,8 @@ permdata = {
     "invite_user": "can_invite_users",
     "pin_messages": "can_pin_messages",
 }
-array1= ["channel","spam","porn","anonchannel","spoiler","url","ubot","vid", "aud","doc", "fwd","pic", "stc", "gif", "game","albm", "voice", "vnote","contact","gps", "address", "reply","message","cmt","edt","mention","inline", "poll", "dice", "button", "media", "emal",]
-array2= ["channel","spam","porn","anonchannel","spoiler","url","userbot","video", "audio","document", "forward","photo", "sticker", "gif", "games","album", "voice", "video_note","contact","location", "address", "reply","message","comment","edit","mention","inline", "polls", "dice", "buttons", "media", "email",]
+array1= ["channel","spam","porn","anonchannel","spoiler","url","vid", "aud","doc", "fwd","pic", "stc", "gif", "game","albm", "voice", "vnote","contact","gps", "address", "reply","message","cmt","edit","mention","inline", "poll", "dice", "button", "media", "emal",]
+array2= ["channel","spam","porn","anonchannel","spoiler","url","video", "audio","document", "forward","photo", "sticker", "gif", "games","album", "voice", "video_note","contact","location", "address", "reply","message","comment","edit","mention","inline", "polls", "dice", "buttons", "media", "email",]
 array3 =["send_messages","send_stickers","send_gifs","send_media","send_games","send_inline","url_prev","send_polls","change_info","invite_user", "pin_messages","all_permissions"]
 array4=["can_send_messages","can_send_stickers","can_send_animations","can_send_media_messages","can_send_games","can_use_inline_bots","can_add_web_page_previews","can_send_polls","can_invite_users","can_change_info","can_pin_messages"]
 array5=["send_messages","send_stickers","send_gifs","send_media","send_games","send_inline","url_prev","send_polls","invite_user","change_info","pin_messages"]
@@ -307,13 +306,11 @@ async def audiolock(client, message):
             return
     except:
         pass
-    chat_id = message.chat.id
-    sender = message.from_user.id
-    iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except:
@@ -344,10 +341,11 @@ async def videolock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return        
+        if message.from_user.id == int(c):
+            return           
     try:
         await message.delete()
     except:
@@ -376,10 +374,11 @@ async def doclock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except:
@@ -404,14 +403,14 @@ async def emaeil(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return     
+        if message.from_user.id == int(c):
+            return        
     texct = message.text
  
     texct = str(texct)
@@ -459,10 +458,11 @@ async def fwd(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     try:
         await message.delete()
     except:
@@ -492,10 +492,11 @@ async def slock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except:
@@ -524,10 +525,11 @@ async def aalock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return        
+        if message.from_user.id == int(c):
+            return           
     try:
         await message.delete()
     except:
@@ -557,10 +559,11 @@ async def aggalock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return          
+        if message.from_user.id == int(c):
+            return             
     try:
         await message.delete()
     except:
@@ -591,10 +594,11 @@ async def alggsjalock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except Exception as e:
@@ -624,10 +628,11 @@ async def alggalgossck(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return          
+        if message.from_user.id == int(c):
+            return             
     try:
         await message.delete()
     except:
@@ -655,10 +660,11 @@ async def alggalock(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return        
+        if message.from_user.id == int(c):
+            return           
     try:
         await message.delete()
     except:
@@ -687,10 +693,11 @@ async def alggalololck(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return     
+        if message.from_user.id == int(c):
+            return        
     try:
         await message.delete()
     except:
@@ -718,10 +725,11 @@ async def alggalololck(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except:
@@ -749,10 +757,11 @@ async def alggalololck(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return         
+        if message.from_user.id == int(c):
+            return            
     try:
         await message.delete()
     except:
@@ -782,10 +791,11 @@ async def reply(client, message):
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     try:
         await message.delete()
     except:
@@ -810,14 +820,14 @@ async def messages(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return     
+        if message.from_user.id == int(c):
+            return        
     
     
     try:
@@ -846,14 +856,14 @@ async def cmt11(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return 
+        if message.from_user.id == int(c):
+            return    
     try:
         await client.get_chat_member(message.chat.id, user_id)
     except UserNotParticipant:
@@ -869,7 +879,7 @@ async def cmt11(client, message):
 async def edt(client, message):
     if not message.chat:
       return   
-    if lockdb.find_one({"edt": message.chat.id}):
+    if lockdb.find_one({"edit": message.chat.id}):
         pass
     else:
         message.continue_propagation()
@@ -878,24 +888,31 @@ async def edt(client, message):
         user_id = message.from_user.id
     except:
         return
-    chat_id = message.chat.id
     try:
         if len(await member_permissions(message.chat.id, message.from_user.id)) > 1:
             return
     except:
         pass
-    approved_userss = approved_users.find({})
-    chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return      
-    
-    
+        if message.from_user.id == int(c):
+            return     
     try:
-        await message.delete()
+        try:
+         await message.delete()
+         sender = message.from_user.mention()
+         lol = await pbot.send_message(
+                message.chat.id,
+                f"""
+{sender}, Your message was deleted as it was edited (like user bot). \n ❗️ Edit are not allowed here""",
+            )
+         await asyncio.sleep(7)
+         await lol.delete()   
+        except:
+             message.continue_propagation()
     except:
         message.continue_propagation()     
 
@@ -922,14 +939,14 @@ async def mnsn(client, message):
             return 
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return 
+        if message.from_user.id == int(c):
+            return    
     
 
     try:
@@ -956,14 +973,14 @@ async def inln(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return     
+        if message.from_user.id == int(c):
+            return        
     
     
     try:
@@ -990,14 +1007,14 @@ async def poll(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return     
+        if message.from_user.id == int(c):
+            return        
     
     
     try:
@@ -1025,14 +1042,14 @@ async def diced(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     
     
     try:
@@ -1060,14 +1077,14 @@ async def button(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     
     
     try:
@@ -1094,14 +1111,14 @@ async def mediwa(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     
     
     try:
@@ -1128,14 +1145,14 @@ async def mediwa(client, message):
             return
     except:
         pass
-    approved_userss = approved_users.find({})
     chat_id = message.chat.id
     sender = message.from_user.id
     iid = sender
-    chats = approved_users.find({})
+    approved_users = Approve(message.chat.id).list_approved()
+    chats = [user[0] for user in approved_users]
     for c in chats:
-        if message.chat.id == c["id"] and iid == c["user"]:
-            return       
+        if message.from_user.id == int(c):
+            return          
     
     
     try:
@@ -1143,41 +1160,7 @@ async def mediwa(client, message):
     except:
         message.continue_propagation()
 
-#userbit
-@app.on_message(
-        filters.edited  
-        | ~filters.linked_channel,
-        group=url
-)
-async def ubot(client, message):
-    if not message.chat:
-      return   
-    if lockdb.find_one({"ubot": message.chat.id}):
-        pass
-    else:
-        message.continue_propagation()
-    try:
-        user_id = message.from_user.id
-    except:
-        return
-    chat_id = message.chat.id
-    try:
-        if len(await member_permissions(message.chat.id, message.from_user.id)) > 1:
-            return
-    except:
-        pass
-    chat_id = message.chat.id
-    sender = message.from_user.id
-    iid = sender
-    try:
-        await message.delete()
-        await message.reply_text(f"""
-{sender}, Your message was deleted (s). \n ❗️ edit are not allowed here""",
-            )
-    except:
-        message.continue_propagation()   
-
-
+ 
 @app.on_message(
         filters.incoming 
         | ~filters.linked_channel,

@@ -6,7 +6,7 @@ from Rose.plugins.captcha import *
 from Rose.mongo.connectiondb import *
 from Rose.plugins.lang import *
 from Rose.mongo.approvedb import Approve
-from Rose.plugins.admin import *
+from Rose.plugins.lock import *
 from Rose.plugins.warn import *
 from EmojiCaptcha import Captcha as emoji_captcha
 import random
@@ -157,7 +157,7 @@ async def cb_handler(bot, query):
             "You're just an admin, not owner\nStay in your limits!",
         )
          return
-        Rules(query.message.chat.id).clear_rules()
+        Rule(query.message.chat.id).clear_rules()
         await query.message.edit_text("Successfully cleared rules for this group!")
         await query.answer("Successfully cleared rules for this group!") 
     if "clear_warns" in query.data: 
@@ -589,10 +589,6 @@ async def cb_handler(bot, query):
             await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(markup))
             if not LocalDB[query.from_user.id]["answer"]:
                 await query.answer("Verification successful ✅", show_alert=True)
-                del LocalDB[query.from_user.id]
-                await bot.unban_chat_member(chat_id=query.message.chat.id, user_id=query.from_user.id)
-                await query.message.delete(True)
-
                 #send welcome message
                 greatdb = Greetings(chat_id)
                 status = greatdb.get_welcome_status()
@@ -621,22 +617,12 @@ async def cb_handler(bot, query):
                    await app.send_message(
                          chat_id,
                                text=text,
-        reply_markup=button,
-        disable_web_page_preview=True,
-    )
-                lol = db.get_current_cleanwelcome_id()
-                xx = db.get_current_cleanwelcome_settings()
-
-                if lol and xx:
-                  try:
-                     await app.delete_messages(chat_id, int(lol))
-                  except Exception as e:
-                     return await app.send_message(LOG_GROUP_ID,text= f"{e}")
-                else:
-                    return       
-
-
-
+                               reply_markup=button,
+                               disable_web_page_preview=True,
+                     )           
+                del LocalDB[query.from_user.id]
+                await bot.unban_chat_member(chat_id=query.message.chat.id, user_id=query.from_user.id)
+                await query.message.delete(True)
             await query.answer()
     if cb_data.startswith("done_"):
         await query.answer("Dont click on same button again", show_alert=True)
